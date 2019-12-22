@@ -74,6 +74,11 @@ function validateFile(): array
  */
 function manageFileUpload(): array
 {
+    // make certain that the file didn't already exist somewhere on our system
+    if (false === is_uploaded_file($_FILES['upload']['tmp_name'])) {
+        throw new Exception('Server error');
+    }
+    
     // choose an unpredictable name
     $fileInfo = pathinfo($_FILES['upload']['name']);
     $extension = $fileInfo['extension'];
