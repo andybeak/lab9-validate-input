@@ -79,9 +79,15 @@ function manageFileUpload(): array
         throw new Exception('Server error');
     }
     
-    // choose an unpredictable name
-    $fileInfo = pathinfo($_FILES['upload']['name']);
-    $extension = $fileInfo['extension'];
+    // choose an unpredictable name and make sure we have the right extension
+    $mimeType = mime_content_type($_FILES['upload']['tmp_name']);
+    $mimeMapping = [
+        'image/gif' => 'gif',
+        'image/jpeg' => 'jpg',
+        'image/jpg' => 'jpf',
+        'image/png' => 'png'
+    ];
+    $extension = $mimeMapping[$mimeType];
     $randomName = bin2hex(random_bytes(8)) . '.' . $extension;
 
     // make sure upload path exists
